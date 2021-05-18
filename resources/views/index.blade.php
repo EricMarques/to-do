@@ -14,41 +14,22 @@
   </thead>
 
   <tbody>
+    @foreach($tasks as $task)   
     <tr>
-      <td><a href="">Slim down to 10 kg</a></td>
+      <td><a href="">
+        @if(!$task->status)
+        {{ $task->content }}
+        @else
+        <strike class="grey-text">{{ $task->content }}</strike>
+        @endif
+      </a></td>
       @isAdmin
-      <td>Buzz McCallister</td>
+      <td>{{ $task->user->name }}</td>
       @endisAdmin
-      <td><a title="edit" href=""><i class="material-icons">edit</i></a></td>
-      <td><a title="delete" href=""><i class="material-icons red-text">delete_forever</i></a></td>
+      <td><a title="edit" href="{{ route('edit', $task->id) }}"><i class="material-icons">edit</i></a></td>
+      <td><a title="delete" onclick="return confirm('Delete?');" href="{{ route('delete', $task->id) }}"><i class="material-icons red-text">delete_forever</i></a></td>
     </tr>
-    <tr>
-      <td><a href="">Order 20 pepsi boxex</a></td>
-      @isAdmin
-      <td>Fuller McCallister</td>
-      @endisAdmin
-      
-      <td><a title="edit" href=""><i class="material-icons">edit</i></a></td>
-      <td><a title="delete" href=""><i class="material-icons red-text">delete_forever</i></a></td>
-    </tr>
-    <tr>
-      <td><a href=""><strike>Repair the door lock</strike></a></td>
-      @isAdmin
-      <td>Harry Lime</td>
-      @endisAdmin
-      
-      <td><a title="edit" href=""><i class="material-icons">edit</i></a></td>
-      <td><a title="delete" href=""><i class="material-icons red-text">delete_forever</i></a></td>
-    </tr>
-    <tr>
-      <td><a href="">Wash the floor</a></td>
-      @isAdmin
-      <td>Marv Merchants</td>
-      @endisAdmin
-      
-      <td><a title="edit" href=""><i class="material-icons">edit</i></a></td>
-      <td><a title="delete" href=""><i class="material-icons red-text">delete_forever</i></a></td>
-    </tr>
+    @endforeach
   </tbody>
 </table>
 
