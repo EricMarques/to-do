@@ -64,7 +64,7 @@
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
-                                  <input nams="is_admin" class="form-check-input" type="checkbox" value="" id="is_admin">
+                                  <input nams="is_admin" class="form-check-input" type="checkbox" id="is_admin">
                                   <label class="form-check-label" for="is_admin">
                                     Cadastrar como um Administrador
                                 </label>
