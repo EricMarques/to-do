@@ -43,17 +43,18 @@
   <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
 </ul>
 <br><br><br>
-<form class="col s12">
+<form method="POST" action="{{ route('store') }}" class="col s12">
   <div class="row">
     <div class="input-field col s12">
-      <input id="task" type="text" class="validate">
+      <input name="task" id="task" type="text" class="validate">
       <label for="task">New task</label>
     </div>
   </div>
 
   @include('partials.coworkers')
 
-  <a class="waves-effect waves-light btn">Add new task</a>
+  <button type="submit" class="waves-effect waves-light btn">Add new task</button>
+  @csrf
 </form>
 
 @isWorker
