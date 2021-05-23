@@ -51,4 +51,12 @@ class ToDoController extends Controller
     	$task->delete();
     	return redirect()->back();
     }
+
+    public function updateStatus($id)
+    {
+        $task = Task::find($id);
+        $task->status = !$task->status;
+        $task->save();
+        return redirect()->back();
+    }
 }

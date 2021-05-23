@@ -16,7 +16,7 @@
   <tbody>
     @foreach($tasks as $task)   
     <tr>
-      <td><a href="">
+      <td><a href="{{ route('updateStatus', $task->id) }}">
         @if(!$task->status)
         {{ $task->content }}
         @else

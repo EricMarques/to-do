@@ -17,6 +17,7 @@ Route::middleware(['auth'])->group(function(){
 	Route::get('/edit/{id}', 'ToDoController@edit')->name('edit');
 	Route::post('/update/{id}', 'ToDoController@update')->name('update');
 	Route::get('/delete/{id}', 'ToDoController@delete')->name('delete');
+	Route::get('/updateStatus/{id}', 'ToDoController@updateStatus')->name('updateStatus');
 });
 
 
