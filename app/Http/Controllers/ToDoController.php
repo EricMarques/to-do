@@ -10,7 +10,11 @@ class ToDoController extends Controller
 {
     public function index()
     {
-    	$tasks = Task::all();
+    	//$tasks = Task::all();
+        $tasks = Task::paginate(10);
+        //$tasks = Task::where('user_id', 2)->paginate(10);
+        //$tasks = Task::where('status', 0)->paginate(10);
+        //$tasks = Task::where('user_id', Auth::user()->id)->paginate(10);
     	return view('index', compact('tasks'));
     }
 

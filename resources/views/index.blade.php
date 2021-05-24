@@ -33,7 +33,9 @@
   </tbody>
 </table>
 
-<ul class="pagination">
+{{ $tasks->links('vendor.pagination.materialize') }}
+
+{{--<ul class="pagination">
   <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
   <li class="active"><a href="#!">1</a></li>
   <li class="waves-effect"><a href="#!">2</a></li>
@@ -41,7 +43,7 @@
   <li class="waves-effect"><a href="#!">4</a></li>
   <li class="waves-effect"><a href="#!">5</a></li>
   <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-</ul>
+</ul>--}}
 <br><br><br>
 <form method="POST" action="{{ route('store') }}" class="col s12">
   <div class="row">
