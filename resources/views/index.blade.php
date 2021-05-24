@@ -33,7 +33,7 @@
   </tbody>
 </table>
 
-{{ $tasks->links('vendor.pagination.materialize') }}
+{{ $tasks->links('vendor.pagination.materialize ') }}
 
 {{--<ul class="pagination">
   <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
@@ -61,17 +61,18 @@
 
 @isWorker
 <br><br><br>
-<form action="" class="col s12">
+<form method="POST" action="{{ route('sendInvitation') }}" class="col s12">
   <div class="input-field">
-    <select>
+    <select name="admin">
       <option value="" disabled selected>Send invitation to:</option>
-      <option value="2">Buzz McCallister</option>
-      <option value="3">Fuller McCallister</option>
-      <option value="4">Harry Lime</option>
-      <option value="5">Marv Merchants</option>
+      @foreach($coworkers as $coworker)
+        <option value="{{ $coworker->id }}">{{ $coworker->name }}</option>
+      @endforeach
     </select>
     <label>Send invitation</label>
   </div>
+  <button type="submit" class="waves-effect waves-light btn">Send Invitation</button>
+  @csrf
 </form>
 @endisWorker
 

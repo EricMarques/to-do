@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Task;
+use App\User;
+use App\Invitation;
 
 class ToDoController extends Controller
 {
@@ -15,7 +17,9 @@ class ToDoController extends Controller
         //$tasks = Task::where('user_id', 2)->paginate(10);
         //$tasks = Task::where('status', 0)->paginate(10);
         //$tasks = Task::where('user_id', Auth::user()->id)->paginate(10);
-    	return view('index', compact('tasks'));
+        //$tasks = Task::where('user_id', Auth::user()->id)->orderBy('user_id')->paginate(10);
+        $coworkers = User::where('is_admin', 1)->get();
+    	return view('index', compact('tasks', 'coworkers'));
     }
 
     public function store(Request $request)
@@ -62,5 +66,20 @@ class ToDoController extends Controller
         $task->status = !$task->status;
         $task->save();
         return redirect()->back();
+    }
+
+    public function sendInvitation(Request $request)
+    {
+        if( (int) $request->input('admin') > 0 
+            && !Invitation::where('worker_id', Auth::user()->id)->where('admin_id', $request->input('admin'))->exists()
+        )
+        {
+            $invitation = new Invitation;
+            $invitation->worker_id = Auth::user()->id;
+            $invitation->admin_id = $request->input('admin');
+            $invitation->save();
+
+        }
+        return redirect('/');
     }
 }
