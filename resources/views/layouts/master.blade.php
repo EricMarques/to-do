@@ -17,45 +17,33 @@
       <p>Logged as <b>{{ Auth::user()->name }}</b> <button type="submit" class="waves-effect waves-light btn right">Logout</button></p>
     </form>
     <br>
+
     @isAdmin
+    @if($invitations->count() > 0)
     <ul class="collapsible">
       <li>
         <div class="collapsible-header">
           <i class="material-icons">person_add</i>
           Invitations
-          <span class="new badge red">4</span>
+          <span class="new badge red">{{ $invitations->count() }}</span>
         </div>
         <div class="collapsible-body">
+          @foreach($invitations as $invitation)
           <div class="row">
             <div class="col s8">
-              <span class="red-text"> <b>Buzz McCallister</b></span>
+              <span class="red-text" id="{{ $invitation->id }}"> <b>{{ $invitation->worker->name }}</b></span>
             </div>
             <div class="col s4">
-              <a href="#"><i class="material-icons green-text">check</i></a> | <a href="#!"><i class="material-icons red-text">close</i></a>
+              <a href="{{ route('acceptInvitation',['id'=>$invitation->id]) }}"><i class="material-icons green-text">check</i></a>
+               | 
+              <a href="{{ route('denyInvitation',['id'=>$invitation->id]) }}"><i class="material-icons red-text">close</i></a>
             </div>
-            <div class="col s8">
-              <span class="red-text"> <b>Fuller McCallister</b></span> 
-            </div>
-            <div class="col s4">
-              <a href="#"><i class="material-icons green-text">check</i></a> | <a href="#!"><i class="material-icons red-text">close</i></a>
-            </div>
-            <div class="col s8">
-              <span class="red-text"> <b>Harry Lime</b></span>
-            </div>
-            <div class="col s4">
-              <a href="#"><i class="material-icons green-text">check</i></a> | <a href="#!"><i class="material-icons red-text">close</i></a>
-            </div>
-            <div class="col s8">
-              <span class="red-text"> <b>Marv Merchants</b></span>
-            </div>
-            <div class="col s4">
-              <a href="#"><i class="material-icons green-text">check</i></a> | <a href="#!"><i class="material-icons red-text">close</i></a>
-            </div>
-
           </div>
+          @endforeach
         </div>
       </li>
     </ul>
+    @endif
     @endisAdmin
 
     <h1 class="center-align green-text text-darken-4">To-do list</h1>

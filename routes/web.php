@@ -20,6 +20,9 @@ Route::middleware(['auth'])->group(function(){
 	Route::get('/updateStatus/{id}', 'ToDoController@updateStatus')->name('updateStatus');
 
 	Route::post('/sendInvitation', 'ToDoController@sendInvitation')->name('sendInvitation');
+	
+	Route::get('/acceptInvitation/{id}', 'ToDoController@acceptInvitation')->name('acceptInvitation');
+	Route::get('/denyInvitation/{id}', 'ToDoController@denyInvitation')->name('denyInvitation');
 });
 
 

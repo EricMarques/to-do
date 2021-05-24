@@ -7,6 +7,8 @@
       <th>Task</th>
       @isAdmin
       <th>Assigned to</th>
+      <th>Created at</th>
+      <th>Updated at</th>
       @endisAdmin
       <th>Edit</th>
       <th>Delete</th>
@@ -25,6 +27,8 @@
       </a></td>
       @isAdmin
       <td>{{ $task->user->name }}</td>
+      <td>{{ $task->created_at->format('d/m/Y  H:i:s') }}</td>
+      <td>{{ $task->updated_at->format('d/m/Y  H:i:s') }}</td>
       @endisAdmin
       <td><a title="edit" href="{{ route('edit', $task->id) }}"><i class="material-icons">edit</i></a></td>
       <td><a title="delete" onclick="return confirm('Delete?');" href="{{ route('delete', $task->id) }}"><i class="material-icons red-text">delete_forever</i></a></td>
@@ -35,15 +39,6 @@
 
 {{ $tasks->links('vendor.pagination.materialize ') }}
 
-{{--<ul class="pagination">
-  <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-  <li class="active"><a href="#!">1</a></li>
-  <li class="waves-effect"><a href="#!">2</a></li>
-  <li class="waves-effect"><a href="#!">3</a></li>
-  <li class="waves-effect"><a href="#!">4</a></li>
-  <li class="waves-effect"><a href="#!">5</a></li>
-  <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-</ul>--}}
 <br><br><br>
 <form method="POST" action="{{ route('store') }}" class="col s12">
   <div class="row">

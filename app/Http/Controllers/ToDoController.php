@@ -13,13 +13,26 @@ class ToDoController extends Controller
     public function index()
     {
     	//$tasks = Task::all();
-        $tasks = Task::paginate(10);
+        //$tasks = Task::paginate(10);
         //$tasks = Task::where('user_id', 2)->paginate(10);
         //$tasks = Task::where('status', 0)->paginate(10);
         //$tasks = Task::where('user_id', Auth::user()->id)->paginate(10);
         //$tasks = Task::where('user_id', Auth::user()->id)->orderBy('user_id')->paginate(10);
-        $coworkers = User::where('is_admin', 1)->get();
-    	return view('index', compact('tasks', 'coworkers'));
+        if (Auth::user()->is_admin)
+        {
+            $invitations = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 0)->get();
+            $coworkers = Invitation::where('admin_id', Auth::user(), 1)->where('accepted', 1)->get();
+            //$tasks = Task::paginate(10);
+            $tasks = Task::where('user_id', Auth::user()->id)->orWhere('admin_id', Auth::user()-> admin_id)->paginate(10);
+        }
+        else
+        {
+            $invitations = [];
+            $coworkers = User::where('is_admin', 1)->get();
+            $tasks = Task::where('user_id', Auth::user()->id)->paginate(10);
+        }
+
+    	return view('index', compact('tasks', 'coworkers', 'invitations'));
     }
 
     public function store(Request $request)
@@ -78,8 +91,24 @@ class ToDoController extends Controller
             $invitation->worker_id = Auth::user()->id;
             $invitation->admin_id = $request->input('admin');
             $invitation->save();
-
         }
         return redirect('/');
+    }
+
+    public function acceptInvitation($id)
+    {
+        $invitation = Invitation::find($id);
+        $invitation->accepted = true;
+        $invitation->save();
+
+        return redirect()->back();
+    }
+
+    public function denyInvitation($id)
+    {
+        $invitation = Invitation::find($id);
+        $invitation->delete();
+
+        return redirect()->back();   
     }
 }
