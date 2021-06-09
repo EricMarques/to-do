@@ -75,10 +75,14 @@
 <br><br><br>
 <ul class="collection with-header">
   <li class="collection-header"><h4>My coworkers</h4></li>
-  <li class="collection-item"><div>Buzz McCallister<a href="#!" class="secondary-content"><i class="material-icons red-text">delete_forever</i></a></div></li>
-  <li class="collection-item"><div>Fuller McCallister<a href="#!" class="secondary-content"><i class="material-icons red-text">delete_forever</i></a></div></li>
-  <li class="collection-item"><div>Harry Lime<a href="#!" class="secondary-content"><i class="material-icons red-text">delete_forever</i></a></div></li>
-  <li class="collection-item"><div>Marv Merchants<a href="#!" class="secondary-content"><i class="material-icons red-text">delete_forever</i></a></div></li>
+  @foreach($coworkers as $coworker)
+    <li class="collection-item"><div>{{ $coworker->worker->name }}
+        <a href="{{ route('deleteWorker', $coworker->id) }}" class="secondary-content">
+          <i class="material-icons red-text">delete_forever</i>
+        </a>
+      </div>
+    </li>  
+  @endforeach
 </ul>
 @endisAdmin
 @endsection

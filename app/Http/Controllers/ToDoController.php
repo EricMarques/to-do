@@ -21,15 +21,15 @@ class ToDoController extends Controller
         if (Auth::user()->is_admin)
         {
             $invitations = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 0)->get();
-            $coworkers = Invitation::where('admin_id', Auth::user(), 1)->where('accepted', 1)->get();
+            $coworkers = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 1)->get();
             //$tasks = Task::paginate(10);
-            $tasks = Task::where('user_id', Auth::user()->id)->orWhere('admin_id', Auth::user()-> admin_id)->paginate(10);
+            $tasks = Task::where('user_id', Auth::user()->id)->orWhere('admin_id', Auth::user()-> admin_id)->orderBy('created_at', 'DESC')->paginate(10);
         }
         else
         {
             $invitations = [];
             $coworkers = User::where('is_admin', 1)->get();
-            $tasks = Task::where('user_id', Auth::user()->id)->paginate(10);
+            $tasks = Task::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
         }
 
     	return view('index', compact('tasks', 'coworkers', 'invitations'));
@@ -92,7 +92,7 @@ class ToDoController extends Controller
             $invitation->admin_id = $request->input('admin');
             $invitation->save();
         }
-        return redirect('/');
+        return rredirect()->back();
     }
 
     public function acceptInvitation($id)
@@ -105,6 +105,14 @@ class ToDoController extends Controller
     }
 
     public function denyInvitation($id)
+    {
+        $invitation = Invitation::find($id);
+        $invitation->delete();
+
+        return redirect()->back();   
+    }
+
+    public function deleteWorker($id)
     {
         $invitation = Invitation::find($id);
         $invitation->delete();

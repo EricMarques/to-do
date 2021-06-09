@@ -1,13 +1,18 @@
 @isAdmin
 <div class="input-field col s12">
-    <select>
-      <option value="" disabled selected>Assign to:</option>
-      <option value="1">To myself</option>
-      <option value="2">Buzz McCallister</option>
-      <option value="3">Fuller McCallister</option>
-      <option value="4">Harry Lime</option>
-      <option value="5">Marv Merchants</option>
-    </select>
-    <label>Assign task</label>
-  </div>
-  @endisAdmin
+  <select name="assignTo">
+    <option value="" disabled selected>Assign to:</option>
+    <option value="{{ Auth::user()->id }}">To myself</option>
+    @foreach($coworkers as $coworker)
+      @if($coworker->worker->id == $task->user->id)
+        <option selected value="{{ $coworker->worker->id }}">{{ $coworker->worker->name }}</option>
+      @else
+        <option value="{{ $coworker->worker->id }}">{{ $coworker->worker->name }}</option>
+      @endif
+    @endforeach
+  </select>
+  <label>Assign task</label>
+</div>
+@endisAdmin
+
+<!--VERIFICAR O MOTIVO DE NÃO ESTAR MOSTRANDO OS COWORKERS-->
