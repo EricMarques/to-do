@@ -20,10 +20,9 @@ class ToDoController extends Controller
         //$tasks = Task::where('user_id', Auth::user()->id)->orderBy('user_id')->paginate(10);
         if (Auth::user()->is_admin)
         {
-            $invitations = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 0)->get();
             $coworkers = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 1)->get();
-            //$tasks = Task::paginate(10);
-            $tasks = Task::where('user_id', Auth::user()->id)->orWhere('admin_id', Auth::user()-> admin_id)->orderBy('created_at', 'DESC')->paginate(10);
+            $invitations = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 0)->get();
+            $tasks = Task::where('user_id', Auth::user()->id)->orWhere('admin_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
         }
         else
         {
@@ -42,9 +41,24 @@ class ToDoController extends Controller
 	    	$task = new Task;
 	    	$task->content = $request->input('task');
 
-    		Auth::user()->tasks()->save($task);
+            if (Auth::user()->is_admin)
+            {
+                if ($request->input('assignTo') == Auth::user()->id)
+                {
+                    Auth::user()->tasks()->save($task);
+                }
+                elseif($request->input('assignTo') != null)
+                {
+                    $task->user_id = $request->input('assignTo');
+                    $task->admin_id = Auth::user()->id;
+                    $task->save();
+                }
+            }
+            else
+            {
+                Auth::user()->tasks()->save($task);
+            }
     	}
-
     	return redirect()->back();
 
     }
@@ -52,7 +66,18 @@ class ToDoController extends Controller
     public function edit($id)
     {
     	$task = Task::find($id);
-    	return view('edit', ['task'=>$task]);
+        if (Auth::user()->is_admin)
+        {
+            $coworkers = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 1)->get();
+            $invitations = Invitation::where('admin_id', Auth::user()->id)->where('accepted', 0)->get();
+        }
+        else
+        {
+            $coworkers = [];
+            $invitations = [];
+        }
+
+    	return view('edit', ['task'=>$task, 'coworkers'=>$coworkers, 'invitations'=>$invitations]);
     }
 
     public function update($id, Request $request)
@@ -61,6 +86,25 @@ class ToDoController extends Controller
     	{
 	    	$task = Task::find($id);
 		    $task->content = $request->input('task');
+            
+            if (Auth::user()->is_admin)
+            {
+                if ($request->input('assignTo') == Auth::user()->id)
+                {
+                    Auth::user()->tasks()->save($task);
+                }
+                elseif ($request->input('assignTo') != null)
+                {
+                    $task->user_id = $request->input('assignTo');
+                    $task->admin_id = Auth::user()->id;
+                    $task->save();
+                }
+            }
+            else
+            {
+                Auth::user()->tasks()->save($task);   
+            }
+            
 		    $task->save();
     	}
     	return redirect('/');
@@ -92,7 +136,7 @@ class ToDoController extends Controller
             $invitation->admin_id = $request->input('admin');
             $invitation->save();
         }
-        return rredirect()->back();
+        return redirect()->back();
     }
 
     public function acceptInvitation($id)

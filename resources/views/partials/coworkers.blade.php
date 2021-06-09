@@ -12,7 +12,4 @@
     @endforeach
   </select>
   <label>Assign task</label>
-</div>
 @endisAdmin
-
-<!--VERIFICAR O MOTIVO DE NÃO ESTAR MOSTRANDO OS COWORKERS-->
