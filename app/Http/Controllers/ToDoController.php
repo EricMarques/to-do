@@ -102,10 +102,9 @@ class ToDoController extends Controller
             }
             else
             {
-                Auth::user()->tasks()->save($task);   
+                if($this->_authorize($task->user_id))
+                $task->save();
             }
-            
-		    $task->save();
     	}
     	return redirect('/');
     }
@@ -113,6 +112,14 @@ class ToDoController extends Controller
     public function delete($id)
     {
     	$task = Task::find($id);
+        if (!Auth::user()->is_admin)
+        {
+            if (!$this->_authorize($task->user_id))
+            {
+                return redirect()->back();
+                exit();
+            }
+        }
     	$task->delete();
     	return redirect()->back();
     }
@@ -121,6 +128,7 @@ class ToDoController extends Controller
     {
         $task = Task::find($id);
         $task->status = !$task->status;
+        if ($this->_authorize($task->user_id))
         $task->save();
         return redirect()->back();
     }
@@ -143,6 +151,7 @@ class ToDoController extends Controller
     {
         $invitation = Invitation::find($id);
         $invitation->accepted = true;
+        if($this->_authorize($invitation->admin_id))
         $invitation->save();
 
         return redirect()->back();
@@ -151,6 +160,7 @@ class ToDoController extends Controller
     public function denyInvitation($id)
     {
         $invitation = Invitation::find($id);
+        if($this->_authorize($invitation->admin_id))
         $invitation->delete();
 
         return redirect()->back();   
@@ -159,8 +169,14 @@ class ToDoController extends Controller
     public function deleteWorker($id)
     {
         $invitation = Invitation::find($id);
+        if($this->_authorize($invitation->admin_id))
         $invitation->delete();
 
         return redirect()->back();   
+    }
+
+    protected function _authorize($id)
+    {
+        return Auth::user()->id === $id ? true : false;
     }
 }
